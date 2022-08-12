@@ -16,21 +16,36 @@ Window {
     function checkButton(btn){
         if(!isNaN(btn))
             digit_pressed(btn);
+        else if (btn === ".")
+            decimal_pressed();
+        else if(btn === "AC")
+            result.text = 0
+        else if(btn === "<-")
+            result.text = result.text.slice(0, -1)
+
+
         console.log(btn)
     }
     function digit_pressed(num){
+        console.log(num)
         var butVal = num;
         var displayVal = result.text;
-        if((Number.parseInt(displayVal) === 0) || (Number.parseInt(displayVal) === 0.0)){
+        if((Number.parseFloat(displayVal) === 0) && (!displayVal.includes("."))){
             result.text = butVal;
 
         }else{
             var newVal = displayVal + butVal;
-            var doubleVal = Number.parseInt(newVal)
-            result.text = doubleVal;
+//            var doubleVal = Number.parseFloat(newVal)
+            result.text = newVal;
 
         }
     }
+    function decimal_pressed(){
+        var displayVal = result.text;
+        displayVal = (displayVal.includes("."))? displayVal : displayVal + ".";
+        result.text = displayVal;
+    }
+
     Item{
         id: resultBox
 

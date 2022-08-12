@@ -7,6 +7,30 @@ Window {
     height: 680
     visible: true
     title: qsTr("Hello World")
+
+    property string equ: ""
+    property int resultNum: 0
+    property int fNumber: 0
+    property int sNumber: 0
+
+    function checkButton(btn){
+        if(!isNaN(btn))
+            digit_pressed(btn);
+        console.log(btn)
+    }
+    function digit_pressed(num){
+        var butVal = num;
+        var displayVal = result.text;
+        if((Number.parseInt(displayVal) === 0) || (Number.parseInt(displayVal) === 0.0)){
+            result.text = butVal;
+
+        }else{
+            var newVal = displayVal + butVal;
+            var doubleVal = Number.parseInt(newVal)
+            result.text = doubleVal;
+
+        }
+    }
     Item{
         id: resultBox
 
@@ -15,7 +39,7 @@ Window {
 
         Label{
             id: equation
-            text: '2*29+47+44'
+            text: ''
             anchors.right: parent.right
             rightPadding: 15
             topPadding: 30
@@ -57,6 +81,10 @@ Window {
                     Layout.fillWidth:true
                     Layout.fillHeight:true
                     text: modelData
+                    onClicked: {
+                        checkButton(text);
+
+                    }
                 }
             }
 
@@ -84,4 +112,5 @@ Window {
             }
         }
     }
+
 }

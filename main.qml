@@ -9,9 +9,14 @@ Window {
     title: qsTr("Hello World")
 
     property string equ: ""
-    property int resultNum: 0
-    property int fNumber: 0
-    property int sNumber: 0
+    property double firstNumber
+    property bool isFirstNumber: true
+    property bool divTrigger: false
+    property bool multTrigger: false
+    property bool addTrigger: false
+    property bool subTrigger: false
+
+
 
     function checkButton(btn){
         if(!isNaN(btn))
@@ -20,22 +25,23 @@ Window {
             decimal_pressed();
         else if(btn === "AC")
             result.text = 0
+
         else if(btn === "<-")
             result.text = result.text.slice(0, -1)
+        else
+            operation_pressed(btn);
 
-
-        console.log(btn)
+        equation.text += btn
     }
     function digit_pressed(num){
-        console.log(num)
         var butVal = num;
         var displayVal = result.text;
-        if((Number.parseFloat(displayVal) === 0) && (!displayVal.includes("."))){
+        if(((Number.parseFloat(displayVal) === 0) || (displayVal === "")) && (!displayVal.includes(".")))
             result.text = butVal;
 
-        }else{
+        else{
             var newVal = displayVal + butVal;
-//            var doubleVal = Number.parseFloat(newVal)
+            //            var doubleVal = Number.parseFloat(newVal)
             result.text = newVal;
 
         }
@@ -44,6 +50,73 @@ Window {
         var displayVal = result.text;
         displayVal = (displayVal.includes("."))? displayVal : displayVal + ".";
         result.text = displayVal;
+    }
+
+    function operation_pressed(btn){
+
+        if (isFirstNumber){
+            divTrigger = false;
+            multTrigger = false;
+            addTrigger = false;
+            subTrigger = false;
+
+            firstNumber = Number.parseFloat(result.text)
+            isFirstNumber = false
+            if(btn === "÷")
+                divTrigger = true;
+            else if(btn === "x")
+                multTrigger = true;
+            else if(btn === "+")
+                addTrigger = true;
+            else
+                subTrigger = true;
+
+
+            console.log("first Number => " + firstNumber)
+            console.log("adding => " + addTrigger)
+            result.text = "";
+
+
+        }else if(addTrigger || subTrigger || multTrigger || divTrigger ){
+            var solution = 0.0
+            var dblDisplayVal = Number.parseFloat(result.text);
+
+            if(addTrigger){
+                solution = firstNumber + dblDisplayVal;
+            } else if(subTrigger){
+                solution = firstNumber - dblDisplayVal;
+            } else if(multTrigger){
+                solution = firstNumber * dblDisplayVal;
+            } else {
+                solution = firstNumber / dblDisplayVal;
+            }
+            console.log("--------------------------------------")
+
+            console.log("first Number => " + firstNumber)
+            console.log("solution => " + solution)
+            console.log("=============================")
+
+            result.text = solution;
+            isFirstNumber = true
+        }
+
+
+
+
+
+    }
+
+    function performOperation(){
+
+
+
+
+        // Put solution in display
+
+
+
+
+
     }
 
     Item{

@@ -75,7 +75,7 @@ Window {
             console.log("first Number => " + firstNumber)
             console.log("adding => " + addTrigger)
             result.text = "";
-
+            altResult.text = firstNumber;
 
         }else if(addTrigger || subTrigger || multTrigger || divTrigger ){
             var solution = 0.0
@@ -96,7 +96,8 @@ Window {
             console.log("solution => " + solution)
             console.log("=============================")
 
-            result.text = solution;
+            result.text = "";
+            altResult.text = solution;
             isFirstNumber = true
         }
 
@@ -138,6 +139,18 @@ Window {
         Label{
             id: result
             text: '0'
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            rightPadding: 15
+            topPadding: equation.height
+            font.pixelSize: 40
+            elide: Text.ElideRight
+
+        }
+        Label{
+            id: altResult
+            text: '0'
+            visible: result.text === ''? true : false;
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             rightPadding: 15

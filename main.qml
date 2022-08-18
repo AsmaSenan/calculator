@@ -8,9 +8,8 @@ Window {
     visible: true
     title: qsTr("Hello World")
 
-    property string equ: ""
-    property double firstNumber
     property int count: 0
+    property double firstNumber
     property string solution: ""
     property bool isNewNumber: false
     property bool divTrigger: false
@@ -36,17 +35,13 @@ Window {
             multTrigger = false
             addTrigger = false
             subTrigger = false
-            equ = ""
             count = 0
             btn = ""
-        }else if(btn === "<-"){
+        }else if(btn === "<-")
             result.text = result.text.slice(0, -1)
-            equation.text = equation.text.slice(0, -1)
-            btn = ""
-        }else
+        else
             operation_pressed(btn);
 
-        equation.text += btn
     }
 
     function digit_pressed(num){
@@ -78,9 +73,9 @@ Window {
             console.log("=============================")
             console.log("call perform")
             console.log("=============================")
+        }else
+            equation.text += Number.parseFloat(result.text)
 
-
-        }
 
             divTrigger = false;
             multTrigger = false;
@@ -89,8 +84,6 @@ Window {
 
             // Store current value in Display
             firstNumber = Number.parseFloat(result.text)
-            console.log("first Number => " + firstNumber)
-            console.log("|||||||||||||||||||||||||||||||||")
 
             if(btn === "÷")
                 divTrigger = true;
@@ -106,12 +99,15 @@ Window {
 
 
             result.text = "";
+            equation.text =(isNaN(equation.text.slice(-1)))? equation.text.slice(0, -1) + btn : equation.text + btn
+            console.log(isNaN(equation.text.slice(-1)))
 
     }
 
     function performOperation(){
 
         var dblDisplayVal = Number.parseFloat(result.text);
+        equation.text += (dblDisplayVal !== "nan")? dblDisplayVal : "";
 
         if(addTrigger || subTrigger || multTrigger || divTrigger ){
 
@@ -131,11 +127,24 @@ Window {
             console.log("solution => " + solution)
             console.log("=============================")
 
-            result.text = solution;
-                        altResult.text = solution;
+            result.text = (solution !== "nan")? solution : "";
+                        altResult.text =  (solution !== "nan")? solution : "";
             isNewNumber = true
         }
 
+    }
+    function resetEveryThing(){
+
+
+        solution = 0
+        firstNumber = 0
+        isNewNumber = false
+        divTrigger = false
+        multTrigger = false
+        addTrigger = false
+        subTrigger = false
+        count = 0
+        btn = ""
 
     }
 

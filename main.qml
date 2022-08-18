@@ -10,7 +10,9 @@ Window {
 
     property string equ: ""
     property double firstNumber
-    property bool isFirstNumber: true
+    property int count: 0
+    property string solution: ""
+    property bool isNewNumber: false
     property bool divTrigger: false
     property bool multTrigger: false
     property bool addTrigger: false
@@ -19,31 +21,45 @@ Window {
 
 
     function checkButton(btn){
+
         if(!isNaN(btn))
             digit_pressed(btn);
         else if (btn === ".")
             decimal_pressed();
-        else if(btn === "AC")
+        else if(btn === "AC"){
             result.text = 0
-
-        else if(btn === "<-")
+            equation.text = ""
+            solution = 0
+            firstNumber = 0
+            isNewNumber = false
+            divTrigger = false
+            multTrigger = false
+            addTrigger = false
+            subTrigger = false
+            equ = ""
+            count = 0
+            btn = ""
+        }else if(btn === "<-"){
             result.text = result.text.slice(0, -1)
-        else
+            equation.text = equation.text.slice(0, -1)
+            btn = ""
+        }else
             operation_pressed(btn);
 
         equation.text += btn
     }
+
     function digit_pressed(num){
+        // Get number on button
         var butVal = num;
+
+        // Get the value in the display
         var displayVal = result.text;
         if(((Number.parseFloat(displayVal) === 0) || (displayVal === "")) && (!displayVal.includes(".")))
             result.text = butVal;
-
         else{
             var newVal = displayVal + butVal;
-            //            var doubleVal = Number.parseFloat(newVal)
-            result.text = newVal;
-
+            result.text = Number.parseFloat(newVal);
         }
     }
     function decimal_pressed(){
@@ -54,14 +70,28 @@ Window {
 
     function operation_pressed(btn){
 
-        if (isFirstNumber){
+        // Cancel out previous math button clicks
+        count+=1
+
+        if(count != 1){
+            performOperation()
+            console.log("=============================")
+            console.log("call perform")
+            console.log("=============================")
+
+
+        }
+
             divTrigger = false;
             multTrigger = false;
             addTrigger = false;
             subTrigger = false;
 
+            // Store current value in Display
             firstNumber = Number.parseFloat(result.text)
-            isFirstNumber = false
+            console.log("first Number => " + firstNumber)
+            console.log("|||||||||||||||||||||||||||||||||")
+
             if(btn === "÷")
                 divTrigger = true;
             else if(btn === "x")
@@ -72,14 +102,19 @@ Window {
                 subTrigger = true;
 
 
-            console.log("first Number => " + firstNumber)
-            console.log("adding => " + addTrigger)
-            result.text = "";
-            altResult.text = firstNumber;
 
-        }else if(addTrigger || subTrigger || multTrigger || divTrigger ){
-            var solution = 0.0
-            var dblDisplayVal = Number.parseFloat(result.text);
+
+
+            result.text = "";
+
+    }
+
+    function performOperation(){
+
+        var dblDisplayVal = Number.parseFloat(result.text);
+
+        if(addTrigger || subTrigger || multTrigger || divTrigger ){
+
 
             if(addTrigger){
                 solution = firstNumber + dblDisplayVal;
@@ -96,26 +131,10 @@ Window {
             console.log("solution => " + solution)
             console.log("=============================")
 
-            result.text = "";
-            altResult.text = solution;
-            isFirstNumber = true
+            result.text = solution;
+                        altResult.text = solution;
+            isNewNumber = true
         }
-
-
-
-
-
-    }
-
-    function performOperation(){
-
-
-
-
-        // Put solution in display
-
-
-
 
 
     }
@@ -149,7 +168,7 @@ Window {
         }
         Label{
             id: altResult
-            text: '0'
+            text: ""
             visible: result.text === ''? true : false;
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
@@ -195,6 +214,7 @@ Window {
                 text: "="
                 font.pixelSize: 18
                 Layout.columnSpan: 2
+                onClicked: performOperation();
                 background: Rectangle{
                     anchors.fill: parent
                     color: "dark orange"

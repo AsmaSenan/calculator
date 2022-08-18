@@ -77,13 +77,15 @@ Window {
             equation.text += Number.parseFloat(result.text)
 
 
+
             divTrigger = false;
             multTrigger = false;
             addTrigger = false;
             subTrigger = false;
 
             // Store current value in Display
-            firstNumber = Number.parseFloat(result.text)
+            firstNumber = (isNaN(Number.parseFloat(result.text)))? firstNumber : Number.parseFloat(result.text);
+
 
             if(btn === "÷")
                 divTrigger = true;
@@ -107,9 +109,9 @@ Window {
     function performOperation(){
 
         var dblDisplayVal = Number.parseFloat(result.text);
-        equation.text += (dblDisplayVal !== "nan")? dblDisplayVal : "";
+        equation.text += (isNaN(dblDisplayVal))? "" : dblDisplayVal;
 
-        if(addTrigger || subTrigger || multTrigger || divTrigger ){
+        if((addTrigger || subTrigger || multTrigger || divTrigger ) && (!isNaN(dblDisplayVal))){
 
 
             if(addTrigger){
@@ -127,8 +129,8 @@ Window {
             console.log("solution => " + solution)
             console.log("=============================")
 
-            result.text = (solution !== "nan")? solution : "";
-                        altResult.text =  (solution !== "nan")? solution : "";
+            result.text = solution;
+            altResult.text =  solution;
             isNewNumber = true
         }
 

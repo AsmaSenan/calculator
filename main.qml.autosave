@@ -139,7 +139,6 @@ Window {
         addTrigger = false
         subTrigger = false
         pressedEqual = false
-        btn = ""
     }
 
     Item{
